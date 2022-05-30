@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <title>Document</title>
+  
+   
+    <style>
+      #map{
+          height:400px;
+          width:100%;
+      }
+      </style>
+</head>
+<body>  
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+          <form action="/userOut" class="form-inline my-2 my-lg-0">
+            <button   class="btn btn-outline-success my-2 my-sm-0" type="submit">Out</button>
+          </form>
+        
+      </nav>
+        <div style="display:inline-flex;margin-left: 120px;" >
+           <button onclick="visible('change_time')"><%= user.car_id1 %> </button>
+           <form action="/dashboard/get_map"  method="post"  id="change_time" class="row gy-2 gx-3 align-items-center" style="visibility:hidden">
+            <div class="col-auto">
+              <label class="visually-hidden" for="autoSizingInput">Saat</label>
+              <input type="text" name="dk" class="form-control" id="dk" placeholder="lütfen dk yazınız">
+            </div>
+            
+              <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+          </form>
+        </div>
+        
+        <div style="display:inline-flex;margin-left: 100px;" >
+            <button onclick="visible1()"><%= user.car_id2 %> </button>
+            <form action="/dashboard/get_map1" method="post" id="change_time1" class="row gy-2 gx-3 align-items-center" style="visibility:hidden">
+             <div class="col-auto">
+               <label class="visually-hidden" for="autoSizingInput">Saat</label>
+               <input type="text" name="dk1" class="form-control" id="dk1" placeholder="lütfen dk yazınız">
+             </div>
+             
+               <button type="submit" class="btn btn-primary">Submit</button>
+             </div>
+           </form>
+         </div>
+      <script >
+          function visible()
+          {
+              if(document.getElementById("change_time").style.visibility=="visible")
+              document.getElementById("change_time").style.visibility="hidden"
+              else
+              document.getElementById("change_time").style.visibility="visible"
+          }
+          function visible1()
+          {
+              if(document.getElementById("change_time1").style.visibility=="visible")
+              document.getElementById("change_time1").style.visibility="hidden"
+              else
+              document.getElementById("change_time1").style.visibility="visible"
+          }
+      </script>
+       <div id="map">
+      </div>
+   
+    <script>
+
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+async function initMap(){
+  
+    var options = {
+        zoom:13,
+        center:{lat:59.334591,lng: 18.063240}
+    }
+    let number=0
+    
+    var map = new google.maps.Map(document.getElementById('map'),options)
+   <% for(let i=middle_data-car1_time;i< middle_data;i++){%>
+      number++
+  var marker = new google.maps.Marker({
+        position:{lat:<%=car_data[i].KonumX%>,lng:<%=car_data[i].KonumY%>},
+        map:map,
+        label:""+number+""
+        
+    })
+    <%}%>
+    number = 0
+    <% 
+    for(let i=middle_data1-car2_time;i< middle_data1;i++){%>
+      number++
+  var marker1 = new google.maps.Marker({
+        position:{lat:<%=car_data1[i].KonumX%>,lng:<%=car_data1[i].KonumY%>},
+        map:map,
+        label:""+number+""
+        
+    })
+    <%}%>
+    let number1=<%=car2_time%>
+    number=<%=car1_time%>
+    const image =
+    "https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png";
+    <% 
+    for(let i=middle_data ,j=middle_data1;i< car_data.length,j<car_data1.length;i++,j++){%>
+      await sleep(6000)
+      number++
+      number1++
+  var marker1 = new google.maps.Marker({
+        position:{lat:<%=car_data[i].KonumX%>,lng:<%=car_data[i].KonumY%>},
+        map:map,
+        icon:image,
+        label:""+number+""
+        
+    })
+    var marker2 = new google.maps.Marker({
+        position:{lat:<%=car_data1[j].KonumX%>,lng:<%=car_data1[j].KonumY%>},
+        map:map,
+        icon:image,
+        label:""+number1+""
+        
+    })
+    
+    <%}%>
+   
+
+   
+    
+   
+}
+
+      
+    </script>
+    
+      
+  
+      <script async
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBbH9AZmKNDPW7m4JX6KD9Jn6Ba9PHVKTs&callback=initMap">
+  </script>
+      
+   
+    <h3><%= user.username %> </h3>
+    <h3><%= user.car_id1 %> </h3>
+    <h3><%= user.car_id2 %> </h3>
+    
+    
+    
+    
+</body>
+</html>
